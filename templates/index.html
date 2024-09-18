@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Production Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #e0f7e0;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 2px solid #6ba362;
+        }
+        header h1 {
+            color: #4a7c3b;
+            margin: 0;
+        }
+        header img {
+            height: 60px;
+            width: auto;
+        }
+        form {
+            margin-bottom: 20px;
+            background-color: #ccebc5;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            border-radius: 5px;
+        }
+        label {
+            font-weight: bold;
+            color: #4a7c3b;
+        }
+        input[type="date"] {
+            padding: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+            border: 1px solid #4a7c3b;
+            border-radius: 5px;
+        }
+        button {
+            padding: 7px 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #4a7c3b;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3b5d2a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4a7c3b;
+            color: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        tr:hover {
+            background-color: #e0f7e0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Production Data</h1>
+        <img src="{{ url_for('static', filename='logo.jpg') }}" alt="Sri Andal Paper Mills Logo">
+    </header>
+    
+    <!-- Navigation tabs -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" href="/">Production Data</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/enter-data">Enter Data</a>
+        </li>
+    </ul>
+
+    <!-- Date filter form -->
+    <form method="GET" action="/">
+        <label for="date">Select Date:</label>
+        <input type="date" id="date" name="date" value="{{ date }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Display transactions -->
+    <table>
+        <thead>
+            <tr>
+                <th>Sl.No</th>
+                <th>Date and Time</th>
+                <th>Shift</th>
+                <th>ProductId</th>
+                <th>GSM</th>
+                <th>BF</th>
+                <th>Reel_Id</th>
+                <th>Reel_Size (cm)</th>
+                <th>Reel_Dia (cm)</th>
+                <th>Weight (Kg)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction[0] }}</td>
+                <td>{{ transaction[1] }}</td>
+                <td>{{ transaction[2] }}</td>
+                <td>{{ transaction[3] }}</td>
+                <td>{{ transaction[4] }}</td>
+                <td>{{ transaction[5] }}</td>
+                <td>{{ transaction[6] }}</td>
+                <td>{{ transaction[7] }}</td>
+                <td>{{ transaction[8] }}</td>
+                <td>{{ transaction[9] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+</body>
+</html>
