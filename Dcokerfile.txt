@@ -1,0 +1,30 @@
+# Use an official Python runtime as a parent image
+FROM python:3.9-buster
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install system dependencies (including those for pyodbc)
+RUN apt-get update && apt-get install -y \
+    git \
+    unixodbc \
+    unixodbc-dev \
+    build-essential \
+    python3-dev
+
+# Clone the repository from GitHub (if needed)
+RUN git clone https://github.com/muruganpm/pythonapp.git .  # Update if necessary
+
+# Copy the requirements.txt file into the container
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Command to run the application
+CMD ["python", "app.py"]
+
+requirements.txt
+flask
+pyodbc
