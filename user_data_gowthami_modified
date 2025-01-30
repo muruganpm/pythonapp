@@ -11,7 +11,7 @@ yum install -y python3.9-pip
 # Clone the repository
 cd /home/ec2-user
 mkdir -p my-python
-git clone https://github.com/muruganpm/pythonapp.git ./my-python  2>&1 > git_clone.log
+git clone https://github.com/muruganpm/pythonapp.git ./my-python
 cd /home/ec2-user/my-python/
 
 # Install Python dependencies
