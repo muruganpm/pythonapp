@@ -1,0 +1,19 @@
+#!/bin/bash
+sudo yum update -y
+sudo yum install python3 python3-pip -y
+
+# Create app directory
+mkdir -p /home/ec2-user/my_flask_app
+cd /home/ec2-user/my_flask_app
+
+# Clone your app from GitHub (Replace with your repo)
+git clone https://github.com/yourusername/your_flask_app.git .
+pip3 install -r requirements.txt
+
+# Start Gunicorn server
+pip3 install gunicorn
+gunicorn --workers 3 --bind 0.0.0.0:5000 app:app --daemon
+
+# Configure firewall
+sudo firewall-cmd --add-port=5000/tcp --permanent
+sudo firewall-cmd --reload
