@@ -17,3 +17,66 @@ gunicorn --workers 3 --bind 0.0.0.0:5000 app:app --daemon
 # Configure firewall
 sudo firewall-cmd --add-port=5000/tcp --permanent
 sudo firewall-cmd --reload
+
+
+#Madhu's version
+
+#!/bin/bash
+# Update system packages
+yum update -y
+
+# Install necessary system dependencies
+yum install -y \
+    git \
+    unixODBC \
+    unixODBC-devel \
+    gcc \
+    gcc-c++ \
+    python3 \
+    python3-devel \
+    python3-pip
+
+# Install Microsoft ODBC Driver for SQL Server
+curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/mssql-release.repo
+ACCEPT_EULA=Y yum install -y msodbcsql17
+
+# Upgrade pip and install Flask + pyodbc
+pip3 install --upgrade pip
+pip3 install flask pyodbc gunicorn
+
+# Clone the Flask app from GitHub
+cd /home/ec2-user
+git clone https://github.com/muruganpm/pythonapp.git python_app
+cd python_app
+
+# Ensure the correct permissions
+chown -R ec2-user:ec2-user /home/ec2-user/python_app
+
+# Install any additional dependencies (if requirements.txt exists)
+if [ -f "requirements.txt" ]; then
+    pip3 install -r requirements.txt
+fi
+
+# Create a systemd service for the Flask app
+cat <<EOF > /etc/systemd/system/python_app.service
+[Unit]
+Description=Flask Application
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/home/ec2-user/python_app
+ExecStart=/usr/bin/python3 /home/ec2-user/python_app/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Reload systemd, enable and start the Flask service
+systemctl daemon-reload
+systemctl enable python_app
+systemctl start python_app
+
+# Open port 5000 in firewall (Amazon Linux 2 has firewalld disabled by default, so only needed if enabled)
+iptables -A INPUT -p tcp --dport 5000 -j ACCEPT
