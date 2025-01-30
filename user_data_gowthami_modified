@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Update package lists
+yum update -y
+
+# Install system dependencies (including those for pyodbc and Python development)
+yum install -y git 
+yum install -y unixODBC 
+yum install -y build-essential 
+yum install -y python3.9-pip
+
+
+# Clone the repository
+git clone https://github.com/muruganpm/pythonapp.git ./my-python
+cd /home/ec2-user/my-python/pythonapp
+
+# Install Python dependencies
+pip3.9 install --no-cache-dir --upgrade pip setuptools wheel
+pip3.9 install --no-cache-dir -r requirements.txt
+
+# Configure firewall
+sudo firewall-cmd --add-port=5000/tcp --permanent
+sudo firewall-cmd --reload
+
+# Create the systemd service file
+cat <<EOF > /etc/systemd/system/my-python-app.service
+[Unit]
+Description=My Python Application
+After=network.target
+
+[Service]
+User=ec2-user # Or another appropriate user
+WorkingDirectory=/home/ec2-user/my-python/pythonapp/
+ExecStart=/usr/bin/python3.9 /home/ec2-user/my-python/pythonapp/app.py  # Or use gunicorn if needed (see below)
+Restart=always
+# If your app needs environment variables, add them here:
+# Environment="VAR1=value1" "VAR2=value2"
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start the service
+systemctl enable my-python-app.service
+systemctl start my-python-app.service
+systemctl status my-python-app.service  # Check the status (important!)
