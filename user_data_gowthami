@@ -15,6 +15,7 @@ cd /home/ec2-user/pythonapp
 pip3.9 install --no-cache-dir --upgrade pip setuptools wheel
 pip3.9 install --no-cache-dir -r requirements.txt
 
+# Configure firewall
 sudo firewall-cmd --add-port=5000/tcp --permanent
 sudo firewall-cmd --reload
 
