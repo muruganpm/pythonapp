@@ -4,14 +4,12 @@
 apt-get update -y
 
 # Install system dependencies (including those for pyodbc and Python development)
-apt-get install -y git unixodbc unixodbc-dev build-essential python3.9 python3.9-dev python3.9-pip
+yum install -y git unixodbc unixodbc-dev build-essential python3.9 python3.9-dev python3.9-pip
 
-# Create a directory for your application
-mkdir /home/ec2-user/flask-app
-cd /home/ec2-user/flask-app
 
 # Clone the repository
 git clone https://github.com/muruganpm/pythonapp.git .
+cd /home/ec2-user/pythonapp
 
 # Install Python dependencies
 pip3.9 install --no-cache-dir --upgrade pip setuptools wheel
@@ -25,8 +23,8 @@ After=network.target
 
 [Service]
 User=ec2-user # Or another appropriate user
-WorkingDirectory=/app
-ExecStart=/usr/bin/python3.9 /app/app.py  # Or use gunicorn if needed (see below)
+WorkingDirectory=/home/ec2-user/pythonapp
+ExecStart=/usr/bin/python3.9 /home/ec2-user/pythonapp/app.py  # Or use gunicorn if needed (see below)
 Restart=always
 # If your app needs environment variables, add them here:
 # Environment="VAR1=value1" "VAR2=value2"
