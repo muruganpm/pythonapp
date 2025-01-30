@@ -7,8 +7,8 @@ apt-get update -y
 apt-get install -y git unixodbc unixodbc-dev build-essential python3.9 python3.9-dev python3.9-pip
 
 # Create a directory for your application
-mkdir /app
-cd /app
+mkdir /home/ec2-user/flask-app
+cd /home/ec2-user/flask-app
 
 # Clone the repository
 git clone https://github.com/muruganpm/pythonapp.git .
