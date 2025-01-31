@@ -45,6 +45,9 @@ Restart=always
 [Install]
 WantedBy=multi-user.target
 EOF
+# provide executable permissions to the file
+chown ec2-user:ec2-user /etc/systemd/system/my-python-app.service
+sudo chmod 644 /etc/systemd/system/my-python-app.service
 
 
 # Enable and start the service
